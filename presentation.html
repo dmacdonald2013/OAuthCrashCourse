@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>OAuth2.0 Crash Course</title>
   <link rel="stylesheet" href="reveal/css/reveal.min.css">
-  <link rel="stylesheet" href="reveal/css/theme/solarized.css" id="theme">
+  <link rel="stylesheet" href="reveal/css/theme/sky.css" id="theme">
   <style>
     .slides img{border:0;}
   </style>
@@ -13,7 +13,165 @@
   <div class="reveal">
     <div class="slides">
       <section>
-          <h1>OAuth2.0 Crash Course</h1>
+          <h2>OAuth2.0 Crash Course</h2>
+          <p>David MacDonald</p>
+          <img src="images/logo.jpeg"/>
+      </section>
+      <section>
+          <h2>What is OAuth (2.0)?</h2>
+          <!-- todo: general description, authn vs authz, framework, requires SSL -->
+      </section>
+      <section>
+        <img src="images/intro-flow.png"/>
+      </section>
+      <section>
+        <h2>Roles and Scopes</h2>
+        <img src="images/roles.png"/>
+        <!-- example scopes -->
+      </section>
+      <section>
+        <h3>Client Profile</h3>
+        <h3>Thick Client Web Application</h3>
+        <img src="images/webapplication.png"/>
+      </section>
+      <section>
+        <h3>Client Profile</h3>
+        <h3>User Agent Application</h3>
+        <img src="images/useragent.png"/>
+      </section>
+      <section>
+        <h3>Registering with Google</h3>
+        <p>https://console.developers.google.com/</p>
+        <img src="images/CreateClientID.png"/>
+      </section>
+      <section>
+        <img src="images/ClientID2.png"/>
+      </section>
+      <section>
+        <img src="images/ClientID.png"/>
+      </section>
+      <section>
+        <!-- overview -->
+      </section>
+      <section>
+        <pre>
+function handleAuthClick(event) {
+  gapi.auth.authorize({
+    client_id: "363817635896.apps.googleusercontent.com",
+    scope: "https://www.googleapis.com/auth/plus.me"},
+    handleAuthResult);
+  return false;
+}
+        </pre>
+      </section>
+      <section>
+        <pre>
+https://accounts.google.com/o/oauth2/auth?
+  client_id=363817635896.apps.googleusercontent.com&
+  scope=https://www.googleapis.com/auth/plus.me&
+  redirect_uri=https://www.summeroftech.com&
+  response_type=token
+        </pre>
+      </section>
+      <section>
+          <img src="images/JSRequestAccess.png"/>
+      </section>
+      <section>
+        <pre>
+https://www.summeroftech.com/#
+  access_token=089df018-918f-4822-83ee-be7ed83da164&
+  token_type=Bearer&
+  expires_in=3600
+        </pre>
+      </section>
+      <section>
+        <pre>
+gapi.client.load('plus', 'v1', function() {
+  var request = gapi.client.plus.people.get({
+    'userId': 'me'
+  });
+  request.execute(function(resp) {
+    var heading = document.createElement('h4');
+    heading.appendChild(
+      document.createTextNode("Hi " + resp.displayName));
+    document.getElementById('content').appendChild(heading);
+  });
+});
+      </pre>
+      </section>
+      <section>
+        <!-- server side flow in Python web-appliction - general overview
+              why use -->
+      </section>
+      <section>
+        <pre>
+flow = OAuth2WebServerFlow(
+  client_id='363817635896.apps.googleusercontent.com',
+  client_secret='olKsDnnp95vBLfDmWPSwjT08',
+  scope='https://www.googleapis.com/auth/plus.me')
+
+callback = self.request.relative_url('/oauth2callback')
+authorize_url = flow.step1_get_authorize_url(callback)
+self.redirect(authorize_url)
+      </section>
+      <section>
+        <pre>
+https://accounts.google.com/o/oauth2/auth?
+  client_id=363817635896.apps.googleusercontent.com&
+  scope=https://www.googleapis.com/auth/plus.me&
+  redirect_uri=https://www.summeroftech.com/oauth2callback&
+  response_type=code&
+  access_type=offline
+        </pre>
+      </section>
+      <section>
+        <img src="images/JSRequestAccess.png"/>
+        <!-- noting about offline access -->
+      </section>
+      <section>
+        <pre>
+https://www.summeroftech.com/oauth2callback?
+  code=jHpY6Rslb32PWBiR9bU6wJ4GrMmF
+        </pre>
+      </section>
+      <section>
+        <pre>
+credentials = flow.step2_exchange(self.request.params)
+        </pre>
+      </section>
+      <section>
+        <pre>
+POST /o/oauth2/token HTTP/1.1
+Host: accounts.google.com
+
+client_id=363817635896.apps.googleusercontent.com&
+redirect_uri=https://www.summeroftech.com/oauth2callback&
+grant_type=authorization_code&
+code=jHpY6Rslb32PWBiR9bU6wJ4GrMmF&
+client_secret=olKsDnnp95vBLfDmWPSwjT08
+        </pre>
+        <pre>
+{
+  "access_token":"1/fFAGRNJru1FTz70BzhT3Zg",
+  "refresh_token":"1/xEoDL4iW3cxlI7yDbSRFYNG01kVKM2C-259HOF2aQbI"
+  "expires_in":3600,
+  "token_type":"Bearer",
+}
+        </pre>
+      </section>
+      <section>
+        <h3>Mobile Applications</h3>
+        <p>Use Google Sign-In (uses web-browser)</p>
+        <!-- like Javascript flow - can't secure client secret -->
+      </section>
+      <section>
+        <h3>The Rest</h3>
+        <ul>
+          <li>SSL Everywhere!</li>
+          <li>Use a library where possible</li>
+          <li>Careful with redirect URIs and Javascript Origins</li>
+          <li>Google OAuth Playground</li>
+        </ul>
       </section>
     </div>
   </div>
