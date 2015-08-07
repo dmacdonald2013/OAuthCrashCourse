@@ -16,6 +16,8 @@
           <h2>OAuth2.0 Crash Course</h2>
           <p>David MacDonald</p>
           <img src="images/logo.jpeg"/>
+          <p/>
+          <small>With help from http://tutorials.jenkov.com/oauth2/index.html</small>
       </section>
       <section>
           <h2>What is OAuth (2.0)?</h2>
@@ -51,7 +53,14 @@
         <img src="images/ClientID.png"/>
       </section>
       <section>
-        <!-- overview -->
+        <h3>JavaScript Client Flow</h3>
+        <ol>
+          <li>Website requests access via Javascript</li>
+          <li>Redirect to Authorization Server</li>
+          <li>User Grants Access</li>
+          <li>User redirected back to page with access token</li>
+          <li>User's browser launches request to resource server with access token</li>
+        </ol>
       </section>
       <section>
         <pre>
@@ -100,8 +109,14 @@ gapi.client.load('plus', 'v1', function() {
       </pre>
       </section>
       <section>
-        <!-- server side flow in Python web-appliction - general overview
-              why use -->
+        <h3>Web-Application Client Flow</h3>
+        <ol>
+          <li>Web-application redirects user to authorization server</li>
+          <li>User Grants Access</li>
+          <li>User redirected back to page with authorization token</li>
+          <li>Web-application exchanges authorization token for access token</li>
+          <li>Web-application launches request to resource server with access token</li>
+        </ol>
       </section>
       <section>
         <pre>
@@ -151,12 +166,12 @@ code=jHpY6Rslb32PWBiR9bU6wJ4GrMmF&
 client_secret=olKsDnnp95vBLfDmWPSwjT08
         </pre>
         <pre>
-{
-  "access_token":"1/fFAGRNJru1FTz70BzhT3Zg",
-  "refresh_token":"1/xEoDL4iW3cxlI7yDbSRFYNG01kVKM2C-259HOF2aQbI"
-  "expires_in":3600,
-  "token_type":"Bearer",
-}
+          {
+            "access_token":"1/fFAGRNJru1FTz70BzhT3Zg",
+            "refresh_token":"1/xEoDL4iW3cxlI7yDbSRFYNG01kVKM2C-259HOF2aQbI"
+            "expires_in":3600,
+            "token_type":"Bearer",
+          }
         </pre>
       </section>
       <section>
